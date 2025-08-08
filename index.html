@@ -1,163 +1,149 @@
-<!DOCTYPE html>
-<html lang="en">
+here
+
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Aternos Panel - Login</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DeadMC Panel</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0f2f5;
-    }
-
-    .navbar {
-      background-color: #1e1e2f;
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      font-family: Arial, sans-serif;
+      background: #202020;
       color: white;
     }
-
-    .navbar .logo {
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    .navbar .menu a {
-      margin-left: 20px;
-      text-decoration: none;
-      color: white;
-      font-weight: 500;
-    }
-
-    .navbar .menu a:hover {
-      text-decoration: underline;
-    }
-
-    .container {
-      height: calc(100vh - 60px);
+    .login-box, .panel-box {
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-
-    .login-box, .panel {
-      background: white;
+    .login {
+      background: #333;
       padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      width: 350px;
+      border-radius: 8px;
+      width: 300px;
       text-align: center;
     }
-
-    .login-box h2 {
-      margin-bottom: 20px;
-    }
-
-    input {
-      width: 90%;
-      padding: 12px;
+    .login input {
+      width: 100%;
+      padding: 10px;
       margin: 10px 0;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    button {
-      padding: 12px 28px;
-      font-size: 16px;
-      font-weight: bold;
       border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.3s;
+      border-radius: 4px;
     }
-
-    .start-btn { background-color: #4CAF50; color: white; }
-    .start-btn:hover { background-color: #3e8e41; }
-
-    .stop-btn { background-color: #f44336; color: white; }
-    .stop-btn:hover { background-color: #da190b; }
-
-    .restart-btn { background-color: #2196F3; color: white; }
-    .restart-btn:hover { background-color: #0b7dda; }
-
-    .btn-group {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin: 20px 0;
-    }
-
-    .output {
-      font-size: 18px;
-      color: red;
+    .login button {
+      width: 100%;
+      padding: 10px;
+      background: #00af4d;
+      border: none;
+      border-radius: 4px;
+      color: white;
       font-weight: bold;
+      cursor: pointer;
     }
-
     .error {
       color: red;
-      margin-top: 10px;
+    }
+    .top-bar {
+      background: #00af4d;
+      padding: 15px;
+      font-size: 20px;
+    }
+    .container {
+      display: flex;
+      height: calc(100vh - 60px);
+    }
+    .side-menu {
+      width: 200px;
+      background: #222;
+    }
+    .side-menu ul {
+      list-style: none;
+      padding: 0;
+    }
+    .side-menu li {
+      padding: 15px;
+      cursor: pointer;
+    }
+    .side-menu li:hover {
+      background: #444;
+    }
+    .main-panel {
+      flex: 1;
+      padding: 20px;
+      background: #f0f0f0;
+      color: black;
+    }
+    .tab {
+      display: none;
+    }
+    .tab.active {
+      display: block;
+    }
+    .btn {
+      padding: 10px 20px;
+      margin: 10px;
+      background: red;
+      border: none;
+      color: white;
       font-weight: bold;
+      border-radius: 4px;
     }
   </style>
 </head>
 <body>
-
-  <div class="navbar">
-    <div class="logo">Aternos Panel</div>
-    <div class="menu">
-      <a href="#">Home</a>
-      <a href="#">Server</a>
-      <a href="#">Software</a>
-      <a href="#">Console</a>
-      <a href="#">Files</a>
-      <a href="#">Users</a>
-      <a href="#">Options</a>
-    </div>
-  </div>
-
-  <div class="container">
-    <!-- === LOGIN BOX === -->
-    <div class="login-box" id="loginBox">
-      <h2>Login Panel</h2>
-      <input type="text" id="username" placeholder="Username"><br>
-      <input type="password" id="password" placeholder="Password"><br>
+  <div id="loginPage" class="login-box">
+    <div class="login">
+      <h2>Login</h2>
+      <input type="text" id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
       <button onclick="login()">Login</button>
-      <div class="error" id="errorBox"></div>
+      <p id="error" class="error"></p>
     </div>
-
-    <!-- === PANEL === -->
-    <div class="panel" id="controlPanel" style="display: none;">
-      <h2>Server Control Panel</h2>
-      <div class="btn-group">
-        <button class="start-btn" onclick="showMessage('Server start button clicked.')">Start</button>
-        <button class="stop-btn" onclick="showMessage('Server stop button clicked.')">Stop</button>
-        <button class="restart-btn" onclick="showMessage('Server restart button clicked.')">Restart</button>
+  </div>  <div id="panelPage" style="display: none;">
+    <div class="top-bar">DeadMC Control Panel</div>
+    <div class="container">
+      <div class="side-menu">
+        <ul>
+          <li onclick="showTab('control')">Control</li>
+          <li onclick="showTab('software')">Software</li>
+          <li onclick="showTab('plugin')">Plugin</li>
+          <li onclick="showTab('world')">World</li>
+          <li onclick="showTab('player')">Player</li>
+        </ul>
       </div>
-      <div class="output" id="outputText"></div>
+      <div class="main-panel">
+        <div id="control" class="tab active">
+          <h2>Server Control</h2>
+          <button class="btn">Start</button>
+          <button class="btn">Stop</button>
+          <button class="btn">Restart</button>
+        </div>
+        <div id="software" class="tab">I'm add waiting...</div>
+        <div id="plugin" class="tab">I'm add waiting...</div>
+        <div id="world" class="tab">I'm add waiting...</div>
+        <div id="player" class="tab">I'm add waiting...</div>
+      </div>
     </div>
-  </div>
-
-  <script>
+  </div>  <script>
     function login() {
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const errorBox = document.getElementById("errorBox");
+      const user = document.getElementById('username').value;
+      const pass = document.getElementById('password').value;
+      const error = document.getElementById('error');
 
-      if (username === "Sarkar" && password === "Sarkar") {
-        document.getElementById("loginBox").style.display = "none";
-        document.getElementById("controlPanel").style.display = "block";
+      if (user === 'Sarkar' && pass === 'Sarkar') {
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('panelPage').style.display = 'block';
       } else {
-        errorBox.textContent = "Invalid username or password.";
+        error.textContent = 'Invalid username or password.';
       }
     }
 
-    function showMessage(msg) {
-      document.getElementById("outputText").textContent = msg;
+    function showTab(id) {
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
     }
-  </script>
-
-</body>
+  </script></body>
 </html>
