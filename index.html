@@ -1,74 +1,163 @@
-<!-- INSTRUCTIONS:
-1. Open this HTML in any browser or host it on GitHub Pages.
-2. Username: Sarkar
-   Password: Sarkar
-3. After login, 3 buttons will show: Start, Stop, Restart
---><!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Minecraft Server Panel</title>
+  <title>Aternos Panel - Login</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+    }
+
+    .navbar {
+      background-color: #1e1e2f;
+      padding: 12px 20px;
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+    }
+
+    .navbar .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .navbar .menu a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+    }
+
+    .navbar .menu a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      height: calc(100vh - 60px);
+      display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      margin: 0;
     }
-    #loginForm, #panel {
+
+    .login-box, .panel {
       background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 350px;
       text-align: center;
     }
+
+    .login-box h2 {
+      margin-bottom: 20px;
+    }
+
     input {
-      padding: 10px;
-      margin: 10px;
-      width: 200px;
+      width: 90%;
+      padding: 12px;
+      margin: 10px 0;
       font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
     }
+
     button {
-      padding: 10px 20px;
+      padding: 12px 28px;
       font-size: 16px;
-      margin: 10px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
+      transition: 0.3s;
     }
-    #panel {
-      display: none;
+
+    .start-btn { background-color: #4CAF50; color: white; }
+    .start-btn:hover { background-color: #3e8e41; }
+
+    .stop-btn { background-color: #f44336; color: white; }
+    .stop-btn:hover { background-color: #da190b; }
+
+    .restart-btn { background-color: #2196F3; color: white; }
+    .restart-btn:hover { background-color: #0b7dda; }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .output {
+      font-size: 18px;
+      color: red;
+      font-weight: bold;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <div id="loginForm">
-    <h2>Login Panel</h2>
-    <input type="text" id="username" placeholder="Username"><br>
-    <input type="password" id="password" placeholder="Password"><br>
-    <button onclick="login()">Login</button>
-    <p id="error" style="color:red;"></p>
-  </div>  <div id="panel">
-    <h2>Server Control Panel</h2>
-    <button onclick="fakeAction('start')">Start</button>
-    <button onclick="fakeAction('stop')">Stop</button>
-    <button onclick="fakeAction('restart')">Restart</button>
-    <p id="status"></p>
-  </div>  <script>
+
+  <div class="navbar">
+    <div class="logo">Aternos Panel</div>
+    <div class="menu">
+      <a href="#">Home</a>
+      <a href="#">Server</a>
+      <a href="#">Software</a>
+      <a href="#">Console</a>
+      <a href="#">Files</a>
+      <a href="#">Users</a>
+      <a href="#">Options</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- === LOGIN BOX === -->
+    <div class="login-box" id="loginBox">
+      <h2>Login Panel</h2>
+      <input type="text" id="username" placeholder="Username"><br>
+      <input type="password" id="password" placeholder="Password"><br>
+      <button onclick="login()">Login</button>
+      <div class="error" id="errorBox"></div>
+    </div>
+
+    <!-- === PANEL === -->
+    <div class="panel" id="controlPanel" style="display: none;">
+      <h2>Server Control Panel</h2>
+      <div class="btn-group">
+        <button class="start-btn" onclick="showMessage('Server start button clicked.')">Start</button>
+        <button class="stop-btn" onclick="showMessage('Server stop button clicked.')">Stop</button>
+        <button class="restart-btn" onclick="showMessage('Server restart button clicked.')">Restart</button>
+      </div>
+      <div class="output" id="outputText"></div>
+    </div>
+  </div>
+
+  <script>
     function login() {
-      const u = document.getElementById("username").value;
-      const p = document.getElementById("password").value;
-      if (u === "Sarkar" && p === "Sarkar") {
-        document.getElementById("loginForm").style.display = "none";
-        document.getElementById("panel").style.display = "block";
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorBox = document.getElementById("errorBox");
+
+      if (username === "Sarkar" && password === "Sarkar") {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("controlPanel").style.display = "block";
       } else {
-        document.getElementById("error").innerText = "Invalid username or password.";
+        errorBox.textContent = "Invalid username or password.";
       }
     }
 
-    function fakeAction(action) {
-      document.getElementById("status").innerText = `Server ${action} button clicked.`;
+    function showMessage(msg) {
+      document.getElementById("outputText").textContent = msg;
     }
-  </script></body>
+  </script>
+
+</body>
 </html>
