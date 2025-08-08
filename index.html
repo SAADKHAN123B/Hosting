@@ -1,0 +1,74 @@
+<!-- INSTRUCTIONS:
+1. Open this HTML in any browser or host it on GitHub Pages.
+2. Username: Sarkar
+   Password: Sarkar
+3. After login, 3 buttons will show: Start, Stop, Restart
+--><!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Minecraft Server Panel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    #loginForm, #panel {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    input {
+      padding: 10px;
+      margin: 10px;
+      width: 200px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 10px;
+      cursor: pointer;
+    }
+    #panel {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="loginForm">
+    <h2>Login Panel</h2>
+    <input type="text" id="username" placeholder="Username"><br>
+    <input type="password" id="password" placeholder="Password"><br>
+    <button onclick="login()">Login</button>
+    <p id="error" style="color:red;"></p>
+  </div>  <div id="panel">
+    <h2>Server Control Panel</h2>
+    <button onclick="fakeAction('start')">Start</button>
+    <button onclick="fakeAction('stop')">Stop</button>
+    <button onclick="fakeAction('restart')">Restart</button>
+    <p id="status"></p>
+  </div>  <script>
+    function login() {
+      const u = document.getElementById("username").value;
+      const p = document.getElementById("password").value;
+      if (u === "Sarkar" && p === "Sarkar") {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("panel").style.display = "block";
+      } else {
+        document.getElementById("error").innerText = "Invalid username or password.";
+      }
+    }
+
+    function fakeAction(action) {
+      document.getElementById("status").innerText = `Server ${action} button clicked.`;
+    }
+  </script></body>
+</html>
