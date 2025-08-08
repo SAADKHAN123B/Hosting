@@ -1,149 +1,211 @@
-here
-
 <!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DeadMC Panel</title>
+  <meta charset="UTF-8">
+  <title>Login - Aternos Style</title>
   <style>
-    body {
+    * {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #202020;
-      color: white;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: sans-serif;
     }
-    .login-box, .panel-box {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    body {
+      background-color: #f4f4f4;
+    }
+    #login {
+      width: 100%;
       height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .login {
-      background: #333;
+    .login-box {
+      background: white;
       padding: 30px;
       border-radius: 8px;
-      width: 300px;
-      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    .login input {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 4px;
-    }
-    .login button {
-      width: 100%;
-      padding: 10px;
-      background: #00af4d;
-      border: none;
-      border-radius: 4px;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .error {
-      color: red;
-    }
-    .top-bar {
-      background: #00af4d;
-      padding: 15px;
-      font-size: 20px;
-    }
-    .container {
-      display: flex;
-      height: calc(100vh - 60px);
-    }
-    .side-menu {
-      width: 200px;
-      background: #222;
-    }
-    .side-menu ul {
-      list-style: none;
-      padding: 0;
-    }
-    .side-menu li {
-      padding: 15px;
-      cursor: pointer;
-    }
-    .side-menu li:hover {
-      background: #444;
-    }
-    .main-panel {
-      flex: 1;
-      padding: 20px;
-      background: #f0f0f0;
-      color: black;
-    }
-    .tab {
-      display: none;
-    }
-    .tab.active {
+    .login-box input {
       display: block;
-    }
-    .btn {
-      padding: 10px 20px;
-      margin: 10px;
-      background: red;
-      border: none;
-      color: white;
-      font-weight: bold;
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
       border-radius: 4px;
     }
+    .login-box button {
+      width: 100%;
+      padding: 10px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #loginError {
+      color: red;
+      text-align: center;
+    }#panel {
+  display: none;
+  height: 100vh;
+  display: flex;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #2d2d2d;
+  color: white;
+  padding-top: 20px;
+}
+
+.sidebar div {
+  padding: 15px 20px;
+  cursor: pointer;
+}
+
+.sidebar div:hover {
+  background-color: #444;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 30px;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+button.control-btn {
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  background: #4caf50;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button.control-btn:hover {
+  background: #3e8e41;
+}
+
+.plugin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
+
+.plugin-item {
+  display: flex;
+  justify-content: space-between;
+  background: #1e1e1e;
+  padding: 10px;
+  border-radius: 8px;
+  color: #fff;
+  align-items: center;
+}
+
+#plugin-status {
+  margin-top: 20px;
+  font-weight: bold;
+  color: green;
+}
+
   </style>
 </head>
-<body>
-  <div id="loginPage" class="login-box">
-    <div class="login">
-      <h2>Login</h2>
-      <input type="text" id="username" placeholder="Username" />
-      <input type="password" id="password" placeholder="Password" />
-      <button onclick="login()">Login</button>
-      <p id="error" class="error"></p>
+<body><!-- LOGIN PAGE --><div id="login">
+  <div class="login-box">
+    <h2 style="text-align:center;">Login Panel</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="checkLogin()">Login</button>
+    <p id="loginError"></p>
+  </div>
+</div><!-- PANEL PAGE --><div id="panel">
+  <div class="sidebar">
+    <div onclick="showTab('control')">Control</div>
+    <div onclick="showTab('software')">Software</div>
+    <div onclick="showTab('plugin')">Plugin</div>
+    <div onclick="showTab('world')">World</div>
+    <div onclick="showTab('player')">Player</div>
+  </div>
+  <div class="content">
+    <div id="control" class="tab-content active">
+      <h2>Server Control</h2>
+      <button class="control-btn">Start</button>
+      <button class="control-btn">Stop</button>
+      <button class="control-btn">Restart</button>
     </div>
-  </div>  <div id="panelPage" style="display: none;">
-    <div class="top-bar">DeadMC Control Panel</div>
-    <div class="container">
-      <div class="side-menu">
-        <ul>
-          <li onclick="showTab('control')">Control</li>
-          <li onclick="showTab('software')">Software</li>
-          <li onclick="showTab('plugin')">Plugin</li>
-          <li onclick="showTab('world')">World</li>
-          <li onclick="showTab('player')">Player</li>
-        </ul>
-      </div>
-      <div class="main-panel">
-        <div id="control" class="tab active">
-          <h2>Server Control</h2>
-          <button class="btn">Start</button>
-          <button class="btn">Stop</button>
-          <button class="btn">Restart</button>
+    <div id="software" class="tab-content">
+      <h2>Software</h2>
+      <p>Click below to download PaperMC:</p>
+      <button class="control-btn" onclick="window.open('https://papermc.io/downloads', '_blank')">Download PaperMC</button>
+    </div>
+    <div id="plugin" class="tab-content">
+      <h2>Plugins</h2>
+      <div class="plugin-list">
+        <div class="plugin-item">
+          <span>EssentialsX.jar</span>
+          <button onclick="installPlugin('EssentialsX')">Install</button>
         </div>
-        <div id="software" class="tab">I'm add waiting...</div>
-        <div id="plugin" class="tab">I'm add waiting...</div>
-        <div id="world" class="tab">I'm add waiting...</div>
-        <div id="player" class="tab">I'm add waiting...</div>
+        <div class="plugin-item">
+          <span>LuckPerms.jar</span>
+          <button onclick="installPlugin('LuckPerms')">Install</button>
+        </div>
+        <div class="plugin-item">
+          <span>WorldEdit.jar</span>
+          <button onclick="installPlugin('WorldEdit')">Install</button>
+        </div>
+        <div class="plugin-item">
+          <span>Vault.jar</span>
+          <button onclick="installPlugin('Vault')">Install</button>
+        </div>
       </div>
+      <div id="plugin-status"></div>
     </div>
-  </div>  <script>
-    function login() {
-      const user = document.getElementById('username').value;
-      const pass = document.getElementById('password').value;
-      const error = document.getElementById('error');
-
-      if (user === 'Sarkar' && pass === 'Sarkar') {
-        document.getElementById('loginPage').style.display = 'none';
-        document.getElementById('panelPage').style.display = 'block';
-      } else {
-        error.textContent = 'Invalid username or password.';
-      }
+    <div id="world" class="tab-content">
+      <h2>World</h2>
+      <p>I’m add waiting…</p>
+    </div>
+    <div id="player" class="tab-content">
+      <h2>Player</h2>
+      <p>I’m add waiting…</p>
+    </div>
+  </div>
+</div><script>
+  function checkLogin() {
+    const user = document.getElementById('username').value;
+    const pass = document.getElementById('password').value;
+    if (user === 'Sarkar' && pass === 'Sarkar') {
+      document.getElementById('login').style.display = 'none';
+      document.getElementById('panel').style.display = 'flex';
+    } else {
+      document.getElementById('loginError').innerText = "Invalid username or password.";
     }
+  }
 
-    function showTab(id) {
-      const tabs = document.querySelectorAll('.tab');
-      tabs.forEach(tab => tab.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-    }
-  </script></body>
+  function showTab(tabId) {
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(t => t.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+  }
+
+  function installPlugin(name) {
+    const status = document.getElementById('plugin-status');
+    status.innerText = `Installing ${name}.jar...`;
+    setTimeout(() => {
+      status.innerText = `Server restarting after installing ${name}.jar...`;
+      setTimeout(() => {
+        status.innerText = `${name}.jar installed successfully.`;
+      }, 2000);
+    }, 1500);
+  }
+</script></body>
 </html>
